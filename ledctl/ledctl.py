@@ -8,6 +8,7 @@ app = Flask(__name__)
 GPIO_RED = 22
 GPIO_GREEN = 27
 GPIO_BLUE = 17
+pi = pigpio.pi()
 
 def to_PWM_dutycycle(string):
     try:
@@ -30,7 +31,6 @@ def set_color():
     r = to_PWM_dutycycle(args['r'])
     g = to_PWM_dutycycle(args['g'])
     b = to_PWM_dutycycle(args['b'])
-    pi = pigpio.pi()
     pi.set_PWM_dutycycle(GPIO_RED, r)
     pi.set_PWM_dutycycle(GPIO_GREEN, g)
     pi.set_PWM_dutycycle(GPIO_BLUE, b)
