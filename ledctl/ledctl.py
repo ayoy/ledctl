@@ -1,25 +1,12 @@
 from flask import Flask, request, jsonify
+from helpers import *
 import pigpio
 app = Flask(__name__)
 
 #rgb 22, 27, 17
 #base teal 40 97 15
 
-GPIO_RED = 22
-GPIO_GREEN = 27
-GPIO_BLUE = 17
 pi = pigpio.pi()
-
-def to_PWM_dutycycle(string):
-    try:
-        i = int(string)
-        if i < 0:
-            i = 0
-        elif i > 255:
-            i = 255
-        return i
-    except ValueError:
-        return 0
 
 @app.route("/")
 def home():
@@ -38,10 +25,8 @@ def set_color():
 
 @app.route("/get_color")
 def get_color():
-    r = pi.get_PWM_dutycycle(GPIO_RED)
-    g = pi.get_PWM_dutycycle(GPIO_GREEN)
-    b = pi.get_PWM_dutycycle(GPIO_BLUE)
-    return jsonify({'red':r, 'green':g, 'blue':b})
+    color = get_current_color(pi)
+    return jsonify(color)
 
 if __name__ == "__main__":
     #app.run(debug=True)
