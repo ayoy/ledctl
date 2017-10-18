@@ -4,6 +4,11 @@ GPIO_RED = 22
 GPIO_GREEN = 27
 GPIO_BLUE = 17
 
+# values as per https://stackoverflow.com/a/596243/969818
+Y_RED = 0.299
+Y_GREEN = 0.587
+Y_BLUE = 0.114
+
 
 class Color(dict):
     def __init__(self, *args, **kwargs):
@@ -29,6 +34,19 @@ class Color(dict):
     @property
     def blue(self):
         return self['blue']
+
+    @property
+    def bred(self):
+        return Y_RED * self.red
+
+    @property
+    def bgreen(self):
+        return Y_GREEN * self.green
+
+    @property
+    def bblue(self):
+        return Y_BLUE * self.blue
+
 
 
 def to_PWM_dutycycle(string):

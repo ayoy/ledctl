@@ -1,7 +1,6 @@
-from time import sleep           # Allows us to call the sleep function to slow down our loop
-import helpers
+from time import sleep
+from helpers import *
 import pigpio
-from colorsys import rgb_to_hls, hls_to_rgb
  
 pi = pigpio.pi()
 
@@ -15,48 +14,41 @@ pi.set_PWM_dutycycle(27, 0)
 pi.set_PWM_dutycycle(17, 0)
 
 def fade_in(red, green, blue):
-    (h, l, s) = rgb_to_hls(float(red)/255, float(green)/255, float(blue)/255)
-    print((h, l, s))
-    cl = 0
+    color = Color(red, green, blue)
+    bred = color.bred
+    bgreen = color.bgreen
+    bblue = color.bblue
+    cb = 0
+    step = 0.01
     while True:
-        (r, g, b) = hls_to_rgb(h, cl, s)
-        r = int(r*255)
-        g = int(g*255)
-        b = int(b*255)
+        (r, g, b) = (int(cb * bred / Y_RED), int(cb * bgreen / Y_GREEN), int(cb * bblue / Y_BLUE))
         pi.set_PWM_dutycycle(22, r)
         pi.set_PWM_dutycycle(27, g)
         pi.set_PWM_dutycycle(17, b)
-        print((r, g, b))
-        cl = cl + 0.005
-        if cl > l:
-            cl = l
-        sleep(0.05)
-        if cl >= l:
+        #print((r, g, b))
+        if cb > 1:
             break
+        cb = cb + step
+        sleep(0.025)
 
 
 def fade_out(red, green, blue):
-    (h, l, s) = rgb_to_hls(float(red)/255, float(green)/255, float(blue)/255)
-    print((h, l, s))
-    cl = l
+    color = Color(red, green, blue)
+    bred = color.bred
+    bgreen = color.bgreen
+    bblue = color.bblue
+    cb = 1
+    step = 0.01
     while True:
-        (r, g, b) = hls_to_rgb(h, cl, s)
-        r = int(r*255)
-        g = int(g*255)
-        b = int(b*255)
+        (r, g, b) = (int(cb * bred / Y_RED), int(cb * bgreen / Y_GREEN), int(cb * bblue / Y_BLUE))
         pi.set_PWM_dutycycle(22, r)
         pi.set_PWM_dutycycle(27, g)
         pi.set_PWM_dutycycle(17, b)
-        print((r, g, b))
-        cl = cl - 0.005
-        if cl < 0:
-            cl = 0
-        sleep(0.05)
-        if cl <= 0:
-            pi.set_PWM_dutycycle(22, 0)
-            pi.set_PWM_dutycycle(27, 0)
-            pi.set_PWM_dutycycle(17, 0)
+        #print((r, g, b))
+        if cb < 0:
             break
+        cb = cb - step
+        sleep(0.025)
 
 
 # Start a loop that never ends
@@ -73,6 +65,6 @@ while True:
     
     oldinput = input
 
-    sleep(0.1)           # Sleep for a full second before restarting our loop
+    sleep(0.1)
 
 
