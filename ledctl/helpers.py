@@ -1,8 +1,8 @@
 import pigpio
 
-GPIO_RED = 22
-GPIO_GREEN = 27
-GPIO_BLUE = 17
+GPIO_RED = 15
+GPIO_GREEN = 14
+GPIO_BLUE = 18
 
 # values as per https://stackoverflow.com/a/596243/969818
 Y_RED = 0.299
